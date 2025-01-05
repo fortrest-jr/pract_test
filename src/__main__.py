@@ -3,8 +3,16 @@ from src.Workload import Workload
 INITIAL_COST = 0
 BIG_SIZE = 2
 
-def calculate_delivery_cost(distance: float, size: float, fragile: bool, workload: Workload) -> int:
-    pass
+
+def calculate_delivery_cost(distance: float, size: float, fragile: bool, workload: Workload) -> float:
+    if not is_possible_to_deliver(fragile, distance):
+        raise ValueError(f'Impossible to deliver fragile at distance {distance} (should not be higher than 30)')
+
+    return ((calculate_distance_cost(distance)
+             + calculate_size_cost(size)
+             + calculate_fragile_cost(fragile))
+            * calculate_workload_multiplier(workload))
+
 
 def calculate_distance_cost(distance: float) -> int:
     if distance < 2:
