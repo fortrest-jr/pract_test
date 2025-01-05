@@ -5,8 +5,15 @@ BIG_SIZE = 2
 
 
 def calculate_delivery_cost(distance: float, size: float, fragile: bool, workload: Workload) -> float:
+    errors = []
+    if distance <= 0:
+        errors.append(f'Distance should be positive, got {distance}')
+    if size <= 0:
+        errors.append(f'Size should be positive, got {size}')
     if not is_possible_to_deliver(fragile, distance):
-        raise ValueError(f'Impossible to deliver fragile at distance {distance} (should not be higher than 30)')
+        errors.append(f'Impossible to deliver fragile at distance {distance} (should not be higher than 30)')
+    if errors:
+        raise ValueError('. '.join(errors))
 
     return ((calculate_distance_cost(distance)
              + calculate_size_cost(size)
