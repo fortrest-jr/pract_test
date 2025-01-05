@@ -15,11 +15,12 @@ def calculate_delivery_cost(distance: float, size: float, fragile: bool, workloa
     if errors:
         raise ValueError('. '.join(errors))
 
-    return ((calculate_distance_cost(distance)
-             + calculate_size_cost(size)
-             + calculate_fragile_cost(fragile))
-            * calculate_workload_multiplier(workload))
+    distance_cost = calculate_distance_cost(distance)
+    size_cost = calculate_size_cost(size)
+    fragile_cost = calculate_fragile_cost(fragile)
+    workload_multiplier = calculate_workload_multiplier(workload)
 
+    return (distance_cost + size_cost + fragile_cost) * workload_multiplier
 
 def calculate_distance_cost(distance: float) -> int:
     if distance < 2:
