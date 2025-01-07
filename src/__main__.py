@@ -1,6 +1,7 @@
 from src.Workload import Workload
 
 INITIAL_COST = 0
+MINIMAL_COST = 400
 BIG_SIZE = 2
 
 
@@ -20,7 +21,9 @@ def calculate_delivery_cost(distance: float, size: float, fragile: bool, workloa
     fragile_cost = calculate_fragile_cost(fragile)
     workload_multiplier = calculate_workload_multiplier(workload)
 
-    return (distance_cost + size_cost + fragile_cost) * workload_multiplier
+    total_cost = (INITIAL_COST + distance_cost + size_cost + fragile_cost) * workload_multiplier
+    return (total_cost if total_cost >= MINIMAL_COST
+            else MINIMAL_COST)
 
 def calculate_distance_cost(distance: float) -> int:
     if distance < 2:
