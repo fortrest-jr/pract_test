@@ -1,21 +1,19 @@
-from src.Workload import Workload
-from src.config import DISTANCE_COSTS, WORKLOAD_MULTIPLIERS, SIZE_COSTS, FRAGILE_COSTS, MAX_FRAGILE_DISTANCE
+from bisect import bisect_right
 
-INITIAL_COST = 0.
-MINIMAL_COST = 400.
+from src.Workload import Workload
+from src.config import (
+    DISTANCE_COSTS,
+    WORKLOAD_MULTIPLIERS,
+    SIZE_COSTS,
+    FRAGILE_COSTS,
+    MAX_FRAGILE_DISTANCE,
+    INITIAL_COST,
+    MINIMAL_COST
+)
 
 
 def calculate_delivery_cost(distance: float, size: float, fragile: bool, workload: Workload) -> float:
-    errors = []
-    if distance <= 0:
-        errors.append(f'Distance should be positive, got {distance}')
-    if size <= 0:
-        errors.append(f'Size should be positive, got {size}')
-    if not is_possible_to_deliver(fragile, distance):
-        errors.append(f'Impossible to deliver fragile at distance {distance},'
-                      f'should not be higher than {MAX_FRAGILE_DISTANCE})')
-    if errors:
-        raise ValueError('. '.join(errors))
+    validate_params(distance, size, fragile)
 
     distance_cost = calculate_distance_cost(distance)
     size_cost = calculate_size_cost(size)
@@ -27,21 +25,30 @@ def calculate_delivery_cost(distance: float, size: float, fragile: bool, workloa
             else MINIMAL_COST)
 
 
+def validate_params(distance: float, size: float, fragile: bool) -> None:
+    errors = []
+    if distance <= 0:
+        errors.append(f'Distance should be positive, got {distance}')
+    if size <= 0:
+        errors.append(f'Size should be positive, got {size}')
+    if not is_possible_to_deliver(fragile, distance):
+        errors.append(f'Impossible to deliver fragile at distance {distance},'
+                      f'should not be higher than {MAX_FRAGILE_DISTANCE})')
+    if errors:
+        raise ValueError('. '.join(errors))
+
+
 def is_possible_to_deliver(fragile: bool, distance: float) -> bool:
     return (not fragile
             or distance <= MAX_FRAGILE_DISTANCE)
 
 
 def calculate_distance_cost(distance: float) -> int:
-    return next(cost
-                for limit, cost in DISTANCE_COSTS.items()
-                if distance >= limit)
+    return get_cost_from_interval(DISTANCE_COSTS, distance, 'distance')
 
 
 def calculate_size_cost(size: float) -> int:
-    return next(cost
-                for limit, cost in SIZE_COSTS.items()
-                if size >= limit)
+    return get_cost_from_interval(SIZE_COSTS, size, 'size')
 
 
 def calculate_fragile_cost(fragile: bool) -> int:
@@ -51,3 +58,12 @@ def calculate_fragile_cost(fragile: bool) -> int:
 def calculate_workload_multiplier(workload: Workload) -> float:
     default_multiplier = WORKLOAD_MULTIPLIERS['DEFAULT']
     return WORKLOAD_MULTIPLIERS.get(workload, default_multiplier)
+
+
+def get_cost_from_interval(cost_intervals_dict: dict[int, int], param_value: float, param_name: str) -> int:
+    param_vals = sorted(cost_intervals_dict.keys())
+    current_val_idx = bisect_right(param_vals, param_value)
+    if current_val_idx == 0:
+        raise ValueError(f'Passed {param_name} {param_value} is lower than lowest configured {param_vals[0]}')
+    current_val_start = param_vals[current_val_idx - 1]
+    return cost_intervals_dict[current_val_start]
