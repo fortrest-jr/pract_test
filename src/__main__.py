@@ -1,7 +1,7 @@
 from src.Workload import Workload
 
-INITIAL_COST = 0
-MINIMAL_COST = 400
+INITIAL_COST = 0.
+MINIMAL_COST = 400.
 BIG_SIZE = 2
 
 
