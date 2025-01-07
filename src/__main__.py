@@ -61,7 +61,3 @@ def calculate_workload_multiplier(workload: Workload) -> float:
             return 1.2
         case _:
             return 1.
-
-
-if __name__ == '__main__':
-    calculate_delivery_cost(1.1, 1.1, True, Workload.MODERATE)
