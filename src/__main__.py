@@ -1,7 +1,7 @@
 from bisect import bisect_right
 
 from src.Workload import Workload
-from src.config import (
+from src.Config import (
     DISTANCE_COSTS,
     WORKLOAD_MULTIPLIERS,
     SIZE_COSTS,
@@ -9,6 +9,11 @@ from src.config import (
     MAX_FRAGILE_DISTANCE,
     INITIAL_COST,
     MINIMAL_COST
+)
+from src.Errors import (
+    NON_POSITIVE_DISTANCE_ERROR,
+    NON_POSITIVE_SIZE_ERROR,
+    DISTANCE_EXCEED_WITH_FRAGILE_ERROR
 )
 
 
@@ -28,15 +33,13 @@ def calculate_delivery_cost(distance: float, size: float, fragile: bool, workloa
 def validate_params(distance: float, size: float, fragile: bool) -> None:
     errors = []
     if distance <= 0:
-        errors.append(f'Distance should be positive, got {distance}')
+        errors.append(NON_POSITIVE_DISTANCE_ERROR.format(distance=distance))
     if size <= 0:
-        errors.append(f'Size should be positive, got {size}')
+        errors.append(NON_POSITIVE_SIZE_ERROR.format(size=size))
     if not is_possible_to_deliver(fragile, distance):
-        errors.append(f'Impossible to deliver fragile at distance {distance},'
-                      f'should not be higher than {MAX_FRAGILE_DISTANCE})')
+        errors.append(DISTANCE_EXCEED_WITH_FRAGILE_ERROR.format(distance=distance, max_distance=MAX_FRAGILE_DISTANCE))
     if errors:
         raise ValueError('. '.join(errors))
-
 
 def is_possible_to_deliver(fragile: bool, distance: float) -> bool:
     return (not fragile
