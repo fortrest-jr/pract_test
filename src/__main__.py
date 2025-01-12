@@ -11,8 +11,8 @@ from src.Config import (
     MINIMAL_COST
 )
 from src.Errors import (
-    NON_POSITIVE_DISTANCE_ERROR,
-    NON_POSITIVE_SIZE_ERROR,
+    NEGATIVE_DISTANCE_ERROR,
+    NEGATIVE_SIZE_ERROR,
     DISTANCE_EXCEED_WITH_FRAGILE_ERROR
 )
 
@@ -32,10 +32,10 @@ def calculate_delivery_cost(distance: float, size: float, fragile: bool, workloa
 
 def validate_params(distance: float, size: float, fragile: bool) -> None:
     errors = []
-    if distance <= 0:
-        errors.append(NON_POSITIVE_DISTANCE_ERROR.format(distance=distance))
-    if size <= 0:
-        errors.append(NON_POSITIVE_SIZE_ERROR.format(size=size))
+    if distance < 0:
+        errors.append(NEGATIVE_DISTANCE_ERROR.format(distance=distance))
+    if size < 0:
+        errors.append(NEGATIVE_SIZE_ERROR.format(size=size))
     if not is_possible_to_deliver(fragile, distance):
         errors.append(DISTANCE_EXCEED_WITH_FRAGILE_ERROR.format(distance=distance, max_distance=MAX_FRAGILE_DISTANCE))
     if errors:
