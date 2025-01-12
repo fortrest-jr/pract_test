@@ -39,21 +39,33 @@ def get_value_cost_pairs_from_interval_dict(interval_dict: dict[T: (int, bool, W
     return [vc(value, cost) for value, cost in interval_dict.items()]
 
 
-@pytest.mark.parametrize('distance, size, fragile, workload',
-                         [vcs for vcs in AllPairs(
-                             [
-                                 get_value_cost_pairs_from_interval_dict(DISTANCE_COSTS),
-                                 get_value_cost_pairs_from_interval_dict(SIZE_COSTS),
-                                 get_value_cost_pairs_from_interval_dict(FRAGILE_COSTS),
-                                 get_value_cost_pairs_from_interval_dict(WORKLOAD_MULTIPLIERS)
-                             ]
-                         )])
+all_params_value_costs = [
+    vcs for vcs in AllPairs(
+        [
+            get_value_cost_pairs_from_interval_dict(DISTANCE_COSTS),
+            get_value_cost_pairs_from_interval_dict(SIZE_COSTS),
+            get_value_cost_pairs_from_interval_dict(FRAGILE_COSTS),
+            get_value_cost_pairs_from_interval_dict(WORKLOAD_MULTIPLIERS)
+        ])
+]
+
+
+def simple_cost_calculator(
+        distance: vc[int, int],
+        size: vc[int, int],
+        fragile: vc[bool, int],
+        workload: vc[Workload, float]):
+    return (distance.cost + size.cost + fragile.cost) * workload.cost
+
+
+@pytest.mark.parametrize('distance, size, fragile, workload', all_params_value_costs)
 def test_cost_on_boundaries(
         distance: vc[int, int],
         size: vc[int, int],
         fragile: vc[bool, int],
         workload: vc[Workload, float]):
-    expected_result = (distance.cost + size.cost + fragile.cost) * workload.cost
+    calculated_cost = simple_cost_calculator(distance, fragile, size, workload)
+    expected_result = calculated_cost if calculated_cost >= MINIMAL_COST else MINIMAL_COST
 
     result = calculate_delivery_cost(distance.value, size.value, fragile.value, workload.value)
 
