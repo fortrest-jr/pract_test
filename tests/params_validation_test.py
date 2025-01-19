@@ -105,5 +105,6 @@ def test_many_exceptions_rise() -> None:
     with pytest.raises(ValueError) as exc_info:
         validate_params(**params)
 
-    for exception_message in expected_messages:
-        assert exception_message in str(exc_info.value), f'missing ValueError {exception_message}'
+    exception_full_text = str(exc_info.value)
+    for expected_message in expected_messages:
+        assert expected_message in exception_full_text, f'Expected error "{exception_full_text}" not found in "{exception_full_text}"'
