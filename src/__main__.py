@@ -33,11 +33,11 @@ def calculate_delivery_cost(distance: float, size: float, fragile: bool, workloa
 def validate_params(distance: float, size: float, fragile: bool) -> None:
     errors = []
     if distance < 0:
-        errors.append(NEGATIVE_DISTANCE_ERROR.format(distance=distance))
+        errors.append(NEGATIVE_DISTANCE_ERROR.format(value=distance))
     if size < 0:
-        errors.append(NEGATIVE_SIZE_ERROR.format(size=size))
+        errors.append(NEGATIVE_SIZE_ERROR.format(value=size))
     if not is_possible_to_deliver(fragile, distance):
-        errors.append(DISTANCE_EXCEED_WITH_FRAGILE_ERROR.format(distance=distance, max_distance=MAX_FRAGILE_DISTANCE))
+        errors.append(DISTANCE_EXCEED_WITH_FRAGILE_ERROR.format(value=distance, max_distance=MAX_FRAGILE_DISTANCE))
     if errors:
         raise ValueError('. '.join(errors))
 
