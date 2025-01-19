@@ -13,7 +13,8 @@ from src.Config import (
 from src.Errors import (
     NEGATIVE_DISTANCE_ERROR,
     NEGATIVE_SIZE_ERROR,
-    DISTANCE_EXCEED_WITH_FRAGILE_ERROR
+    DISTANCE_EXCEED_WITH_FRAGILE_ERROR,
+    CANNOT_GET_VALUE_FROM_INTERVAL_ERROR
 )
 
 
@@ -41,6 +42,7 @@ def validate_params(distance: float, size: float, fragile: bool) -> None:
     if errors:
         raise ValueError('. '.join(errors))
 
+
 def is_possible_to_deliver(fragile: bool, distance: float) -> bool:
     return (not fragile
             or distance <= MAX_FRAGILE_DISTANCE)
@@ -67,6 +69,9 @@ def get_cost_from_interval(cost_intervals_dict: dict[int, int], param_value: flo
     param_vals = sorted(cost_intervals_dict.keys())
     current_val_idx = bisect_right(param_vals, param_value)
     if current_val_idx == 0:
-        raise ValueError(f'Passed {param_name} {param_value} is lower than lowest configured {param_vals[0]}')
+        raise ValueError(CANNOT_GET_VALUE_FROM_INTERVAL_ERROR.format(
+            param_name=param_name,
+            param_value=param_value,
+            lowest_value=param_vals[0]))
     current_val_start = param_vals[current_val_idx - 1]
     return cost_intervals_dict[current_val_start]
