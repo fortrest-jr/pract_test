@@ -5,16 +5,40 @@ from src.Errors import NEGATIVE_DISTANCE_ERROR, NEGATIVE_SIZE_ERROR, DISTANCE_EX
 from src.__main__ import validate_params
 
 
-@pytest.fixture()
-def default_params() -> dict[str, int | bool]:
-    return {
-        'distance': 1,
-        'size': 1,
+@pytest.mark.parametrize('valid_distance,valid_size', [
+    (0, 0),
+    (0.1, 0.1),
+    (1000, 1000),
+    (float('inf'), float('inf'))
+])
+def test_valid_positive_values_pass(default_params, valid_distance, valid_size) -> None:
+    params = {
+        **default_params,
+        'distance': valid_distance,
+        'size': valid_size
+    }
+    validate_params(**params)
+
+
+def test_large_distance_with_non_fragile_passes(default_params) -> None:
+    params = {
+        **default_params,
+        'distance': MAX_FRAGILE_DISTANCE * 10,
         'fragile': False
     }
+    validate_params(**params)
 
 
-@pytest.mark.parametrize('negative_distance',[
+def test_max_fragile_distance_boundary(default_params) -> None:
+    params = {
+        **default_params,
+        'distance': MAX_FRAGILE_DISTANCE,
+        'fragile': True
+    }
+    validate_params(**params)
+
+
+@pytest.mark.parametrize('negative_distance', [
     -0.1,
     -1,
     -100
@@ -30,7 +54,7 @@ def test_negative_distance_raises_exception(default_params, negative_distance) -
         validate_params(**params)
 
 
-@pytest.mark.parametrize('negative_size',[
+@pytest.mark.parametrize('negative_size', [
     -0.1,
     -1,
     -100
@@ -47,9 +71,9 @@ def test_negative_size_raises_exception(default_params, negative_size) -> None:
 
 
 @pytest.mark.parametrize('distance_exceedance', [
-    0.1,
+    0.000001,
     1,
-    100
+    10000
 ])
 def test_big_distance_with_fragile_raises_exception(default_params, distance_exceedance) -> None:
     exceed_distance = MAX_FRAGILE_DISTANCE + distance_exceedance
@@ -59,7 +83,8 @@ def test_big_distance_with_fragile_raises_exception(default_params, distance_exc
         'distance': exceed_distance
     }
 
-    expected_message = DISTANCE_EXCEED_WITH_FRAGILE_ERROR.format(value=exceed_distance, max_distance=MAX_FRAGILE_DISTANCE)
+    expected_message = DISTANCE_EXCEED_WITH_FRAGILE_ERROR.format(value=exceed_distance,
+                                                                 max_distance=MAX_FRAGILE_DISTANCE)
     with pytest.raises(ValueError, match=expected_message):
         validate_params(**params)
 
