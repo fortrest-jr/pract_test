@@ -62,3 +62,23 @@ def test_big_distance_with_fragile_raises_exception(default_params, distance_exc
     expected_message = DISTANCE_EXCEED_WITH_FRAGILE_ERROR.format(value=exceed_distance, max_distance=MAX_FRAGILE_DISTANCE)
     with pytest.raises(ValueError, match=expected_message):
         validate_params(**params)
+
+
+def test_many_exceptions_rise() -> None:
+    negative_size = -1
+    exceed_distance = MAX_FRAGILE_DISTANCE + 1
+    params = {
+        'size': negative_size,
+        'distance': exceed_distance,
+        'fragile': True
+    }
+
+    expected_messages = [
+        NEGATIVE_SIZE_ERROR.format(value=negative_size),
+        DISTANCE_EXCEED_WITH_FRAGILE_ERROR.format(value=exceed_distance, max_distance=MAX_FRAGILE_DISTANCE)
+    ]
+    with pytest.raises(ValueError) as exc_info:
+        validate_params(**params)
+
+    for exception_message in expected_messages:
+        assert exception_message in str(exc_info.value), f'missing ValueError {exception_message}'
