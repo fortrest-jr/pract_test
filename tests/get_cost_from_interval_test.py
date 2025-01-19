@@ -11,7 +11,7 @@ from src.__main__ import get_cost_from_interval
     ({0: 50, 100: 100, 1000: 200}, 50, 50),
     ({0: 50, 100: 100, 1000: 200}, 500, 100),
 ])
-def test_get_cost_from_interval_returns_correct_cost(intervals, value, expected_cost):
+def test_get_cost_from_interval_returns_correct_cost(intervals, value, expected_cost) -> None:
     result = get_cost_from_interval(intervals, value, "test_param")
     assert result == expected_cost
 
@@ -22,7 +22,7 @@ def test_get_cost_from_interval_returns_correct_cost(intervals, value, expected_
     ({0: 50}, 0, 50),
     ({0: 50}, 1000, 50),
 ])
-def test_get_cost_from_interval_single_interval(intervals, value, expected_cost):
+def test_get_cost_from_interval_single_interval(intervals, value, expected_cost) -> None:
     result = get_cost_from_interval(intervals, value, "test_param")
     assert result == expected_cost
 
@@ -33,7 +33,7 @@ def test_get_cost_from_interval_single_interval(intervals, value, expected_cost)
     ({1: 100, 2: 200}, 0),
     ({0.1: 100, 0.2: 200}, 0.05),
 ])
-def test_get_cost_from_interval_raises_on_too_small_value(intervals, value):
+def test_get_cost_from_interval_raises_on_too_small_value(intervals, value) -> None:
     param_name = 'test_param'
     lowest_value = sorted(intervals.keys())[0]
     expected_message = CANNOT_GET_VALUE_FROM_INTERVAL_ERROR.format(
