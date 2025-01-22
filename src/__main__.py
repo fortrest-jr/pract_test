@@ -65,8 +65,8 @@ def calculate_workload_multiplier(workload: Workload) -> float:
     return WORKLOAD_MULTIPLIERS.get(workload, default_multiplier)
 
 
-def get_cost_from_interval(cost_intervals_dict: dict[int, int], param_value: float, param_name: str) -> int:
-    param_vals = sorted(cost_intervals_dict.keys())
+def get_cost_from_interval(value_cost_interval: dict[int, int], param_value: float, param_name: str) -> int:
+    param_vals = sorted(value_cost_interval.keys())
     current_val_idx = bisect_right(param_vals, param_value)
     if current_val_idx == 0:
         raise ValueError(CANNOT_GET_VALUE_FROM_INTERVAL_ERROR.format(
@@ -74,4 +74,4 @@ def get_cost_from_interval(cost_intervals_dict: dict[int, int], param_value: flo
             param_value=param_value,
             lowest_value=param_vals[0]))
     current_val_start = param_vals[current_val_idx - 1]
-    return cost_intervals_dict[current_val_start]
+    return value_cost_interval[current_val_start]

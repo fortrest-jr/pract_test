@@ -3,7 +3,7 @@ import pytest
 from src.Config import DISTANCE_COSTS
 from src.__main__ import calculate_distance_cost
 from src.Errors import CANNOT_GET_VALUE_FROM_INTERVAL_ERROR
-from tests.conftest import EPSILON
+from tests.helpers import EPSILON, generate_boundaries_from_interval
 
 
 @pytest.mark.parametrize(
@@ -44,15 +44,7 @@ def test_calculate_distance_cost_at_boundary_from_interval_values(distance, expe
     assert result == expected_cost
 
 
-LOWER_BOUNDARIES = [(float(distance), cost) for distance, cost in DISTANCE_COSTS.items()]
-UPPER_BOUNDARIES = [
-    (upper_distance - EPSILON, cost)
-    for upper_distance, cost in zip(list(DISTANCE_COSTS.keys())[1:], DISTANCE_COSTS.values())
-]
-BOUNDARIES = LOWER_BOUNDARIES + UPPER_BOUNDARIES
-
-
-@pytest.mark.parametrize('distance, expected_cost', BOUNDARIES)
+@pytest.mark.parametrize('distance, expected_cost', generate_boundaries_from_interval(DISTANCE_COSTS))
 def test_calculate_distance_cost_at_boundary_values(distance, expected_cost):
     result = calculate_distance_cost(distance)
     assert result == expected_cost

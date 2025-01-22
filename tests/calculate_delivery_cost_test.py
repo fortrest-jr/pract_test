@@ -19,8 +19,7 @@ T = TypeVar('T')
 ])
 def test_minimal_cost_applied_when_lower(distance: float, size: float, fragile: bool, workload: Workload):
     result_cost = calculate_delivery_cost(distance, size, fragile, workload)
-    expected_cost = MINIMAL_COST
-    assert result_cost == expected_cost
+    assert result_cost == MINIMAL_COST
 
 
 @pytest.mark.parametrize('distance, size, fragile, workload, expected_cost', [

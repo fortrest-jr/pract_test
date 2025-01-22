@@ -3,7 +3,7 @@ import pytest
 from src.Config import MAX_FRAGILE_DISTANCE
 from src.Errors import NEGATIVE_DISTANCE_ERROR, NEGATIVE_SIZE_ERROR, DISTANCE_EXCEED_WITH_FRAGILE_ERROR
 from src.__main__ import validate_params
-from tests.conftest import EPSILON
+from tests.helpers import EPSILON
 
 
 @pytest.mark.parametrize('valid_distance,valid_size', [
