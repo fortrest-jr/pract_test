@@ -12,4 +12,6 @@ calculate_delivery_cost(distance=1, size=1, fragile=False, workload=Workload.MOD
 
 # Run tests
 
-`pytest`
+Basic run: `pytest`
+
+Check coverage: `pytest --cov=src`
