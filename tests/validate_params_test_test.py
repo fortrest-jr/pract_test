@@ -101,7 +101,7 @@ def test_many_exceptions_rise() -> None:
     for expected_message in expected_messages:
         assert (
             expected_message in exception_full_text
-        ), f'Expected error "{exception_full_text}" not found in "{exception_full_text}"'
+        ), f'Expected error "{exception_full_text}"\nnot found in: "{exception_full_text}"'
 
 
 @pytest.fixture()
