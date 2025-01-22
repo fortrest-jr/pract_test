@@ -35,18 +35,20 @@ def test_counting_cost(distance: float, size: float, fragile: bool, workload: Wo
 vc = namedtuple('vc', 'value cost')
 
 
-def get_value_cost_pairs_from_interval_dict(interval_dict: dict[T: (int, bool, Workload), int]) -> list[vc[T, int]]:
+def get_value_cost_pairs_from_interval_dict(interval_dict: dict[T:(int, bool, Workload), int]) -> list[vc[T, int]]:
     return [vc(value, cost) for value, cost in interval_dict.items()]
 
 
 all_params_value_costs = [
-    vcs for vcs in AllPairs(
+    vcs
+    for vcs in AllPairs(
         [
             get_value_cost_pairs_from_interval_dict(DISTANCE_COSTS),
             get_value_cost_pairs_from_interval_dict(SIZE_COSTS),
             get_value_cost_pairs_from_interval_dict(FRAGILE_COSTS),
-            get_value_cost_pairs_from_interval_dict(WORKLOAD_MULTIPLIERS)
-        ])
+            get_value_cost_pairs_from_interval_dict(WORKLOAD_MULTIPLIERS),
+        ]
+    )
 ]
 
 

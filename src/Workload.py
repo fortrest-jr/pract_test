@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class Workload(Enum):
     NORMAL = 1
     MODERATE = 2
