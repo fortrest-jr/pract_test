@@ -14,7 +14,7 @@ from src.__main__ import get_cost_from_interval
         ({0: 50, 100: 100, 1000: 200}, 500, 100),
     ],
 )
-def test_get_cost_from_interval_returns_correct_cost(intervals, value, expected_cost) -> None:
+def test_get_cost_from_interval_on_middle_values(intervals, value, expected_cost) -> None:
     result = get_cost_from_interval(intervals, value, "test_param")
     assert result == expected_cost
 

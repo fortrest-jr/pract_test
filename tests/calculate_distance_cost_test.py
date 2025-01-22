@@ -15,7 +15,13 @@ from tests.helpers import generate_boundaries_from_interval
         (35.0, 300),
     ],
 )
-def test_calculate_distance_cost_returns_correct_cost(distance, expected_cost):
+def test_calculate_distance_cost_on_middle_values(distance, expected_cost):
+    result = calculate_distance_cost(distance)
+    assert result == expected_cost
+
+
+@pytest.mark.parametrize('distance, expected_cost', generate_boundaries_from_interval(DISTANCE_COSTS))
+def test_calculate_distance_cost_on_boundary_values(distance, expected_cost):
     result = calculate_distance_cost(distance)
     assert result == expected_cost
 
@@ -36,15 +42,3 @@ def test_calculate_distance_cost_raises_on_negative_distance(distance):
     )
     with pytest.raises(ValueError, match=expected_message):
         calculate_distance_cost(distance)
-
-
-@pytest.mark.parametrize('distance, expected_cost', DISTANCE_COSTS.items())
-def test_calculate_distance_cost_at_boundary_from_interval_values(distance, expected_cost):
-    result = calculate_distance_cost(distance)
-    assert result == expected_cost
-
-
-@pytest.mark.parametrize('distance, expected_cost', generate_boundaries_from_interval(DISTANCE_COSTS))
-def test_calculate_distance_cost_at_boundary_values(distance, expected_cost):
-    result = calculate_distance_cost(distance)
-    assert result == expected_cost

@@ -12,7 +12,7 @@ from src.Config import WORKLOAD_MULTIPLIERS
         (Workload.VERY_HIGH, WORKLOAD_MULTIPLIERS[Workload.VERY_HIGH]),
     ],
 )
-def test_valid_workload_multipliers(workload, expected_multiplier) -> None:
+def test_valid_workload_multipliers_returns_configured_costs(workload, expected_multiplier) -> None:
     result = calculate_workload_multiplier(workload)
     assert result == expected_multiplier
 

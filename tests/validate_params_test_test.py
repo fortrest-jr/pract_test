@@ -6,6 +6,15 @@ from src.__main__ import validate_params
 from tests.helpers import MINIMAL_TEST_VALUE
 
 
+@pytest.fixture()
+def default_params() -> dict[str, int | bool]:
+    return {
+        'distance': 1,
+        'size': 1,
+        'fragile': False
+    }
+
+
 @pytest.mark.parametrize('valid_distance,valid_size', [
     (0, 0),
     (MINIMAL_TEST_VALUE, MINIMAL_TEST_VALUE),
@@ -100,14 +109,5 @@ def test_many_exceptions_rise() -> None:
     exception_full_text = str(exc_info.value)
     for expected_message in expected_messages:
         assert (
-            expected_message in exception_full_text
+                expected_message in exception_full_text
         ), f'Expected error "{exception_full_text}"\nnot found in: "{exception_full_text}"'
-
-
-@pytest.fixture()
-def default_params() -> dict[str, int | bool]:
-    return {
-        'distance': 1,
-        'size': 1,
-        'fragile': False
-    }
