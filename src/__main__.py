@@ -1,7 +1,7 @@
 from bisect import bisect_right
 
-from src.Workload import Workload
-from src.Config import (
+from .Workload import Workload
+from .Config import (
     DISTANCE_COSTS,
     WORKLOAD_MULTIPLIERS,
     SIZE_COSTS,
@@ -10,7 +10,7 @@ from src.Config import (
     INITIAL_COST,
     MINIMAL_COST,
 )
-from src.Errors import (
+from .ErrorMessages import (
     NEGATIVE_DISTANCE_ERROR,
     NEGATIVE_SIZE_ERROR,
     DISTANCE_EXCEED_WITH_FRAGILE_ERROR,

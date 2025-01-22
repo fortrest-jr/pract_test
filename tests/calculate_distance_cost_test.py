@@ -2,7 +2,7 @@ import pytest
 
 from src.Config import DISTANCE_COSTS
 from src.__main__ import calculate_distance_cost
-from src.Errors import CANNOT_GET_VALUE_FROM_INTERVAL_ERROR
+from src.ErrorMessages import CANNOT_GET_VALUE_FROM_INTERVAL_ERROR
 from tests.helpers import generate_boundaries_from_interval
 
 

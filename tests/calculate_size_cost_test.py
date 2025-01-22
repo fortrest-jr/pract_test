@@ -1,7 +1,7 @@
 import pytest
 
 from src.Config import SIZE_COSTS
-from src.Errors import CANNOT_GET_VALUE_FROM_INTERVAL_ERROR
+from src.ErrorMessages import CANNOT_GET_VALUE_FROM_INTERVAL_ERROR
 from src.__main__ import calculate_size_cost
 from tests.helpers import generate_boundaries_from_interval
 

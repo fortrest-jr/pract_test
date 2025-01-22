@@ -1,6 +1,6 @@
 import pytest
 
-from src.Errors import CANNOT_GET_VALUE_FROM_INTERVAL_ERROR
+from src.ErrorMessages import CANNOT_GET_VALUE_FROM_INTERVAL_ERROR
 from src.__main__ import get_cost_from_interval
 
 
