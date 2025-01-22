@@ -3,12 +3,12 @@ import pytest
 from src.Config import MAX_FRAGILE_DISTANCE
 from src.Errors import NEGATIVE_DISTANCE_ERROR, NEGATIVE_SIZE_ERROR, DISTANCE_EXCEED_WITH_FRAGILE_ERROR
 from src.__main__ import validate_params
-from tests.helpers import EPSILON
+from tests.helpers import MINIMAL_TEST_VALUE
 
 
 @pytest.mark.parametrize('valid_distance,valid_size', [
     (0, 0),
-    (EPSILON, EPSILON),
+    (MINIMAL_TEST_VALUE, MINIMAL_TEST_VALUE),
     (1000, 1000),
     (float('inf'), float('inf'))
 ])
@@ -40,7 +40,7 @@ def test_max_fragile_distance_boundary(default_params) -> None:
 
 
 @pytest.mark.parametrize('negative_distance', [
-    -EPSILON,
+    -MINIMAL_TEST_VALUE,
     -1,
     -100
 ])
@@ -53,7 +53,7 @@ def test_negative_distance_raises_exception(default_params, negative_distance) -
 
 
 @pytest.mark.parametrize('negative_size', [
-    -EPSILON,
+    -MINIMAL_TEST_VALUE,
     -1,
     -100
 ])
@@ -66,7 +66,7 @@ def test_negative_size_raises_exception(default_params, negative_size) -> None:
 
 
 @pytest.mark.parametrize('distance_exceedance', [
-    EPSILON,
+    MINIMAL_TEST_VALUE,
     1,
     10000
 ])

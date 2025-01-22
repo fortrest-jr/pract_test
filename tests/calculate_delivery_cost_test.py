@@ -10,6 +10,7 @@ from src.Workload import Workload
 from src.__main__ import calculate_delivery_cost, MINIMAL_COST
 
 T = TypeVar('T')
+value_cost = namedtuple('vc', 'value cost')
 
 
 @pytest.mark.parametrize('distance, size, fragile, workload', [
@@ -31,16 +32,15 @@ def test_counting_cost(distance: float, size: float, fragile: bool, workload: Wo
     assert result_cost == pytest.approx(expected_cost)
 
 
-vc = namedtuple('vc', 'value cost')
 
 
-def get_value_cost_pairs_from_interval_dict(interval_dict: dict[T:(int, bool, Workload), int]) -> list[vc[T, int]]:
-    return [vc(value, cost) for value, cost in interval_dict.items()]
+def get_value_cost_pairs_from_interval_dict(interval_dict: dict[T:(int, bool, Workload), int]) -> list[value_cost[T, int]]:
+    return [value_cost(value, cost) for value, cost in interval_dict.items()]
 
 
 all_params_value_costs = [
-    vcs
-    for vcs in AllPairs(
+    value_cost_pairs
+    for value_cost_pairs in AllPairs(
         [
             get_value_cost_pairs_from_interval_dict(DISTANCE_COSTS),
             get_value_cost_pairs_from_interval_dict(SIZE_COSTS),
@@ -52,19 +52,19 @@ all_params_value_costs = [
 
 
 def simple_cost_calculator(
-        distance: vc[int, int],
-        size: vc[int, int],
-        fragile: vc[bool, int],
-        workload: vc[Workload, float]):
+        distance: value_cost[int, int],
+        size: value_cost[int, int],
+        fragile: value_cost[bool, int],
+        workload: value_cost[Workload, float]):
     return (distance.cost + size.cost + fragile.cost) * workload.cost
 
 
 @pytest.mark.parametrize('distance, size, fragile, workload', all_params_value_costs)
 def test_cost_on_boundaries(
-        distance: vc[int, int],
-        size: vc[int, int],
-        fragile: vc[bool, int],
-        workload: vc[Workload, float]):
+        distance: value_cost[int, int],
+        size: value_cost[int, int],
+        fragile: value_cost[bool, int],
+        workload: value_cost[Workload, float]):
     calculated_cost = simple_cost_calculator(distance, fragile, size, workload)
     expected_result = calculated_cost if calculated_cost >= MINIMAL_COST else MINIMAL_COST
 
